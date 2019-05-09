@@ -79,11 +79,57 @@ class Goods(models.Model):
 
 
 
+# 商城首页商品类别广告
+class IndexAd(models.Model):
+    category = models.ForeignKey(GoodsCategory,related_name='category',verbose_name='商品类目')
+    goods = models.ForeignKey(Goods,related_name='goods')
+
+    class Meta:
+        verbose_name = '商品类目'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.goods.name
+
+
+# 商品轮播图
+class GoodsImage(models.Model):
+    goods = models.ForeignKey(Goods,related_name='images',verbose_name='商品')
+    image = models.ImageField(upload_to='',verbose_name='图片',null=True,blank=True)
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
+
+    class Meta:
+        verbose_name = '商品图片（轮播）'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return self.goods.name
 
 
 
+# 轮播的商品
+class Banner(models.Model):
+    goods = models.ForeignKey(Goods,verbose_name='商品')
+    image = models.ImageField(upload_to='banner',verbose_name='轮播图片')
+    index = models.IntegerField(default=0,verbose_name='轮播顺序')
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
+
+    class Meta:
+        verbose_name = '轮播商品'
+        verbose_name_plual = verbose_name
+
+    def __str__(self):
+        return self.goods.name
 
 
+# 热搜词
+class KeyWords(models.Model):
+    keywords = models.CharField(max_length=20,default='',verbose_name='热搜词')
+    index = models.IntegerField(default=0,verbose_name='排序')
+    add_time = models.DateTimeField(default=datetime.now,verbose_name='添加时间')
 
+    class Meta:
+        verbose_name = '热搜词'
+        verbose_name_plural = verbose_name
 
-
+    def __str__(self):
+        return self.keywords
